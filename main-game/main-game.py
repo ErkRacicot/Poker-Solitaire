@@ -41,6 +41,7 @@ while (running):
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
            running = False
+                       
     #start button
         if screenv == 0:
             if event.type == pygame.MOUSEBUTTONDOWN:
