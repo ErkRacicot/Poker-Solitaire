@@ -12,8 +12,6 @@ class Card():
         self.ypos = ypos
         self.face = face
         self.suit_val = suit_val
-
-    def show_card(self):
         if self.value == 11:
             face_value = 'Jack'
         elif self.value == 12:
@@ -25,8 +23,9 @@ class Card():
         else:
             face_value = self.value
 
+    def show_card(self):
+        #Queue the image to the next update
         display.blit(self.face, (self.xpos, self.ypos))
-        pygame.display.update()
 
      
 class Deck():
@@ -88,6 +87,7 @@ class Deck():
         return self._put_in_discard_pile
 def front_card_in_row(mylist = [], *arguments):
     print(len(mylist))
+
 myDeck = Deck()
 myDeck.shuffle_deck()
 display = pygame.display.set_mode((1180, 700))
@@ -104,10 +104,10 @@ temp_loop = 0
 row_check = 0
 which_row = 0
 selected = bool
-background = pygame.image.load('F:/AndrewPokerSolitaire/MiscPhotos/green_felt.jpg')
+background = pygame.image.load('MiscPhotos/green_felt.jpg')
 background = pygame.transform.scale(background, (1180, 700))
 display.blit(background, (0, 0))
-visual_deck = pygame.image.load('F:/AndrewPokerSolitaire/MiscPhotos/start-screen-card2.png')
+visual_deck = pygame.image.load('MiscPhotos/start-screen-card2.png')
 visual_deck = pygame.transform.scale(visual_deck, (card_width, card_height))
 display.blit(visual_deck, (1010, 20))
 for i in range(5):
@@ -121,35 +121,68 @@ for i in range(5):
     row[i][0].ypos = row_ypos
     row[i][0].show_card()
 cardcount = 5
-while cardcount < 25:
-    active_card = myDeck.draw_card_from_deck()
-    cardcount += 1
-    active_card.xpos = 1010
-    active_card.ypos = 280
-    active_card.show_card()
-    temp_loop = 1
-    while temp_loop == 1: #loop to check for picked row
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                x, y = event.pos
-                for i in range(5):
-                    for j in row[i]:
-                        if j.face.get_rect().collidepoint(x-j.xpos, y-j.ypos):
-                            print(i)
-                            if len(row[i]) < 5:
-                                row[i].ypos = (-190 + i*200) 
-                                row[i].append(active_card)
-                                row[i].sort(key=operator.attrgetter('value'))
-                                temp_loop = 0
 
+active_card = myDeck.draw_card_from_deck()
+active_card.xpos = 1010
+active_card.ypos = 280
+active_card.show_card()
+cardcount += 1
+
+#Main Game Loop
+#game ends when 25 cards have been drawn
+while cardcount <= 25:
+
+    row_selected = -1 #a row hasn't been selected yet
+    
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            x, y = event.pos
+
+            #determine which row is clicked
+            #allow any card in row j to be clicked
+            for i in range(5):
+                for j in row[i]:
+                    if j.face.get_rect().collidepoint(x-j.xpos, y-j.ypos) and row_selected < 0:
+                        row_selected = i
+                        #print('row selected' + str(row_selected))
+                        
+            #move active card to selected row                     
+            if row_selected >= 0:
+                if len(row[row_selected]) < 5: #only allow a row to have five cards
+                    #print('length of row' + str(len(row[row_selected])))
+                    
+                    row[row_selected].append(active_card)
+                    row[row_selected].sort(key=operator.attrgetter('value'))
+                    #re-arrange x and y coordinates of cards in changed row
+                    for j in range(len(row[row_selected])):
+                        row[row_selected][j].xpos = 10 + row_selected * 200
+                        row[row_selected][j].ypos = 20 + j * 50
+
+                    #draw new active card
+                    active_card = myDeck.draw_card_from_deck()
+                    active_card.xpos = 1010
+                    active_card.ypos = 280
+                    cardcount += 1
+
+    #Update Game Screen
+
+    #display background
+    display.blit(background, (0, 0))
+    #display deck
+    display.blit(visual_deck, (1010, 20))
+    #display active card
+    active_card.show_card()
+    
+    #Show all cards and queue updates
     for i in range(5):
         for j in row[i]:
             j.show_card()
-    #pygame.display.flip()
+            
+    pygame.display.update()
                             
-
+#add code here to calculate the scoring
         
                                     
                     
