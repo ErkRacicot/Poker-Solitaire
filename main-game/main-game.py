@@ -262,12 +262,45 @@ while (running):
 
         if screenv == 2:
             howscreen = pygame.display.set_mode((1200,700))
-            howbg = pygame.image.load(os.path.join('img','poker-hand-rankings.png'))
+            howbg = pygame.image.load(os.path.join('img','poker-hand-rankings3.jpg'))
             howscreen.blit(howbg,(0,0))    
-   
+            myfont4 = pygame.font.SysFont("Gisha", 20)
+            line1 = myfont4.render("Poker Solitaire is a combination of the timeless leisure", 1, (0,0,0), 0)
+            line2 = myfont4.render("classic, Solitaire, and Poker. The game begins with cards", 1, (0,0,0), 0)
+            line3 = myfont4.render("dealt out side by side, creating five rows. The goal is to", 1, (0,0,0), 0)
+            line4 = myfont4.render("create five of the best poker hand you can (see hand ", 1, (0,0,0), 0)
+            line5 = myfont4.render("ranking chart for more details). At the end of the game ", 1, (0,0,0), 0)
+            line6 = myfont4.render("based on the different hands you create, a score is ", 1, (0,0,0), 0)
+            line7 = myfont4.render("calculated. Good Luck! ", 1, (0,0,0), 0)
+            hback = myfont3.render("Back",1,(0,0,0),0)
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                  mousex, mousey = event.pos
+                  if (mousex > 430 and mousex < 470 and mousey > 550 and mousey < 610):
+                      print('start!!!')
+                      screenv =0
+                      Screen = pygame.display.set_mode((x1,y1))
+                      pygame.display.flip() 
+
+            if event.type == pygame.MOUSEMOTION:
+                mousex, mousey = event.pos
+                if (mousex > 430 and mousex < 470 and mousey > 550 and mousey < 610):
+                    print('hi')
+                    hback = myfont3.render("Back",1,(0,0,127),0)
+                else:
+                    hback = myfont3.render("Back",1,(0,0,0),0)
 
 
-    
+
+            howscreen.blit(thowtoplay,(410,20))
+            howscreen.blit(line1,(355,110))
+            howscreen.blit(line2,(355,135))
+            howscreen.blit(line3,(355,160))
+            howscreen.blit(line4,(355,185))
+            howscreen.blit(line5,(355,210))
+            howscreen.blit(line6,(355,235))
+            howscreen.blit(line7,(355,260))
+            howscreen.blit(hback,(430,550))
+            pygame.display.flip()
     pygame.display.flip()
 
 
